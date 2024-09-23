@@ -16,11 +16,20 @@ int steps = 0;
 float lastAccelerationZ = 0;
 float lastAccelerationX = 0;
 float lastAccelerationY = 0;
-const int threshold = 5000;  // Adjust based on testing
+const int threshold = 3000;  // Adjust based on testing
 const int debounceTime = 200; // Milliseconds between valid steps
 unsigned long lastStepTime = 0;
 
+
+// Pin for 801S Vibration Sensor
+const int vibrationPin = 34;   // GPIO pin connected to the sensor
+bool fallDetected = false;
+
+
+
 void setup() {
+  pinMode(vibrationPin, INPUT);
+  
   // Initialize serial communication
   Serial.begin(115200);
   
@@ -82,6 +91,7 @@ void loop() {
 
   // Display the step count on OLED
   display.clearDisplay();
+  display.setTextSize(2);
   display.setCursor(0, 0);
   display.print("Steps: ");
   display.println(steps);
@@ -91,4 +101,25 @@ void loop() {
 
   // Delay for stability and to avoid excessive sensor reading
   delay(100);
+//Serial.println(vibrationPin);
+int vibrationValue = digitalRead(vibrationPin);
+Serial.println(vibrationValue);
+
+//  if (vibrationValue == LOW) {
+//    fallDetected = true;
+//    Serial.println("Fall Detected!");
+//    
+//    // Display the fall detection message
+//    display.clearDisplay();
+//    display.setCursor(0, 0);
+//   //
+//   display.setTextSize(2);
+//    display.print("FALL");
+//    display.setCursor(0, 16);
+//    display.print("DETECTED!");
+//    display.display();
+//
+//    // Add delay to avoid multiple triggers
+//    delay(2000);  // Wait 2 seconds
+ // }
 }
